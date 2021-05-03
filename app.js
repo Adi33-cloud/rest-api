@@ -8,10 +8,12 @@ const bodyParser = require('body-parser');
 
 //Import Routes
 const postsRoute = require('./routes/posts');
+const authRoute = require('./routes/auth');
 
 //Middlewares
 app.use(bodyParser.json());
 app.use('/posts', postsRoute);
+app.use('/api/user', authRoute);
 
 //Routes
 app.get('/', (req, res) => {
