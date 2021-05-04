@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const verify = require('../validation/verifyToken');
 
-//GET request: all the posts in schema 
-router.get('/', async (req, res) => {
+//GET request: all the posts in schema from logged in user
+router.get('/', verify, async (req, res) => {
     try {
-        const allPosts = await Post.find();
+        const allPosts = await Post.find({ user_id: req.user });
         res.json(allPosts);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
-//GET request: specific post based on post ID
+//GET request: recives posts based on post id
 router.get('/:postID', async (req, res) => {
     try {
         const postFound = await Post.findById(req.params.postID);
@@ -23,8 +24,9 @@ router.get('/:postID', async (req, res) => {
 });
 
 //POST request: creates a new post in DB
-router.post('/', async (req, res) => {
+router.post('/', verify, async (req, res) => {
     const post = new Post({
+        user_id: req.user,
         title: req.body.title,
         description: req.body.description
     });
