@@ -10,7 +10,7 @@ const authRoute = require("./routes/auth");
 
 //Middlewares
 app.use(bodyParser.json());
-app.use("/posts", postsRoute);
+app.use("/api/posts", postsRoute);
 app.use("/api/users", authRoute);
 
 //Routes

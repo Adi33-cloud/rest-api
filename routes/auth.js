@@ -9,6 +9,7 @@ const {
   loginValidation,
 } = require("../validation/validation");
 
+//POST: Register a new user
 router.post("/register", async (req, res) => {
   //Validate request data so that User has proper input
   const { error } = registerValidation(req.body);
@@ -36,6 +37,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+//POST: Login a new user
 router.post("/login", async (req, res) => {
   //Validate request data to see if login input is valid
   const { error } = loginValidation(req.body);
@@ -56,6 +58,16 @@ router.post("/login", async (req, res) => {
   //Create and assign a token for logged in user
   const token = jwt.sign({ _id: userFound._id }, process.env.SECRET_TOKEN);
   res.header("auth-token", token).send({ authToken: token });
+});
+
+//DELETE: delete a user
+router.delete("/:userID", async (req, res) => {
+  try {
+    const userRemoved = await User.remove({ _id: req.params.userID });
+    res.json(userRemoved);
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
 });
 
 module.exports = router;
